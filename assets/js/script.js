@@ -79,6 +79,7 @@ const ul = document.querySelector("ul");
 const printCart = () => {
   let cart = [];
   let str = "";
+  ul.innerHTML = "";
   if (localStorage.getItem("cart")) cart = JSON.parse(localStorage.getItem("cart"));
   cart.forEach(elm => {
     str = `https://striveschool-api.herokuapp.com/books?asin=${elm}`;
@@ -89,9 +90,9 @@ const printCart = () => {
         const li = document.createElement("li");
         li.innerText = bookArr[0].title;
         const button = document.createElement("button");
-        button.classList = "btn";
+        button.classList = "btn btn-danger";
         button.innerHTML = `<i class="bi bi-trash"></i>`;
-        button.addEventListener("click", delCart, bookArr[0].asin);
+        button.addEventListener("click", event => delCart(event, bookArr[0].asin));
         li.appendChild(button);
         ul.appendChild(li);
       })
@@ -101,7 +102,8 @@ const printCart = () => {
 
 printCart();
 
-const delCart = id => {
+const delCart = (event, id) => {
+  console.log(id);
   let cart = [];
   let newCart = [];
   if (localStorage.getItem("cart")) cart = JSON.parse(localStorage.getItem("cart"));
@@ -111,4 +113,5 @@ const delCart = id => {
     } else newCart.push(elm);
   });
   localStorage.setItem("cart", JSON.stringify(newCart));
+  printCart();
 };
